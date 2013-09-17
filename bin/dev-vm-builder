@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'thor'
+
+class DevVmBuilderCli < Thor
+  package_name 'dev-vm-builder'
+
+  desc 'build', 'Build a development vm'
+  def build
+  end
+
+end
+
+DevVmBuilderCli.start
