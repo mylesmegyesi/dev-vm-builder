@@ -22,7 +22,7 @@ module DevVmBuilder
     attr_reader :vm_config
 
     def packer_build
-      `packer build --force=true --only=#{vm_config.provider} #{vm_config.compiled_packer_template_path}`
+      exec "packer build --force=true --only=#{vm_config.provider} #{vm_config.compiled_packer_template_path}"
     end
 
     def generate_packer_template
