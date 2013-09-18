@@ -14,11 +14,16 @@ module DevVmBuilder
       generate_packer_template
       generate_preseed
       generate_postinstall
+      packer_build
     end
 
     private
 
     attr_reader :vm_config
+
+    def packer_build
+      `packer build --force=true --only=#{vm_config.provider} #{vm_config.compiled_packer_template_path}`
+    end
 
     def generate_packer_template
       render_packer_template_file('template.json.erb', vm_config.compiled_packer_template_path)
