@@ -86,7 +86,8 @@ module DevVmBuilder
     def self.provisioners(builders, vm_config)
       builders.reduce({}) do |acc, builder|
         acc[builder[:name]] = {
-          :execute_command => "echo '#{vm_config.admin_username}'|sudo -S sh '{{.Path}}'"
+          :scripts
+          :execute_command => "echo '#{vm_config.admin_password}'|sudo -S sh '{{.Path}}'"
         }
         acc
       end

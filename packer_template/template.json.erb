@@ -7,7 +7,8 @@
   "provisioners": [
     {
       "type": "shell",
-      "script": "<%= @vm_config.compiled_postinstall_script_path %>"
+      "override": <%= provisioners.to_json %>,
+      "scripts": ["<%= @vm_config.compiled_postinstall_script_path %>"]
     }
   ],
   "post-processors": [
