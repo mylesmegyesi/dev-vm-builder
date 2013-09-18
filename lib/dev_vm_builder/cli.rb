@@ -50,19 +50,14 @@ module DevVmBuilder
       :type    => :numeric
     }
 
-    method_option 'vm-name', {
-      :aliases => '-v',
-      :default => 'dev-vm',
-      :desc    => 'The hostname of the virtual machine',
-      :type    => :string
-    }
+    builders = DevVmBuilder::Builders.builders(DevVmBuilder::ISOS, VmConfig.new('tmp', {})).map { |b| b[:name] }
 
-    method_option 'provider', {
+    method_option 'builder', {
       :type    => :string,
       :aliases => '-P',
-      :default => 'virtualbox',
-      :desc    => 'The provider to create the virtual machine for',
-      :enum    => %w(virtualbox vmware)
+      :default => builders.first,
+      :desc    => 'The builder to create the virtual machine with',
+      :enum    => builders
     }
 
     def build
@@ -80,7 +75,6 @@ module DevVmBuilder
         :memory         => options[:memory],
         :cpus           => options[:cpus],
         :disk_size      => options[:'disk-size'],
-        :vm_name        => options[:'vm-name'],
         :provider       => options[:provider]
       })
     end

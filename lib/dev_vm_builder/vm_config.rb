@@ -2,18 +2,17 @@ module DevVmBuilder
   class VmConfig
 
     attr_reader :admin_username, :admin_password, :home,
-      :memory, :cpus, :disk_size, :vm_name, :provider
+      :memory, :cpus, :disk_size, :builder
 
     def initialize(temp_directory, options)
       @temp_directory = temp_directory
       @admin_username = options[:admin_username]
       @admin_password = options[:admin_password]
-      @home           = options[:home]
+      @home           = options[:home] || ''
       @memory         = options[:memory]
       @cpus           = options[:cpus]
       @disk_size      = options[:disk_size]
-      @vm_name        = options[:vm_name]
-      @provider       = options[:provider]
+      @builder        = options[:builder]
     end
 
     def compiled_packer_template_path

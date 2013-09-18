@@ -1,5 +1,8 @@
+require 'json'
 require 'erb'
 require 'fileutils'
+require 'dev_vm_builder/isos'
+require 'dev_vm_builder/builders'
 
 module DevVmBuilder
   class BuildVm
@@ -22,7 +25,7 @@ module DevVmBuilder
     attr_reader :vm_config
 
     def packer_build
-      exec "packer build --force=true --only=#{vm_config.provider} #{vm_config.compiled_packer_template_path}"
+      exec "packer build --force=true --only=#{vm_config.builder} #{vm_config.compiled_packer_template_path}"
     end
 
     def generate_packer_template
