@@ -42,13 +42,13 @@ module DevVmBuilder
             'modifyvm',
             '{{.Name}}',
             '--memory',
-            vm_config.memory
+            vm_config.memory.to_s
           ],
           [
             'modifyvm',
             '{{.Name}}',
             '--cpus',
-            vm_config.cpus
+            vm_config.cpus.to_s
           ]
         ]
       }
