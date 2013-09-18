@@ -12,30 +12,30 @@
         "initrd=/install/initrd.gz -- <enter>"
       ],
       "boot_wait": "5s",
-      "disk_size": 20140,
+      "disk_size": <%= @vm_config.disk_size %>,
       "guest_os_type": "Ubuntu_64",
       "headless": true,
-      "http_directory": "<%= @http_directory %>",
+      "http_directory": "<%= @vm_config.compiled_preseed_directory_path %>",
       "iso_checksum": "61d5e67c70d97b33c13537461a0b153b41304ef412bb0e9d813bb157068c3c65",
       "iso_checksum_type": "sha256",
       "iso_url": "http://releases.ubuntu.com/12.04/ubuntu-12.04.3-server-amd64.iso",
-      "shutdown_command": "echo '<%= @ssh_username %>' | sudo -S shutdown -P now",
-      "ssh_password": "<%= @ssh_username %>",
+      "shutdown_command": "echo '<%= @vm_config.admin_username %>' | sudo -S shutdown -P now",
+      "ssh_password": "<%= @vm_config.admin_password %>",
       "ssh_port": 22,
-      "ssh_username": "<%= @ssh_username %>",
+      "ssh_username": "<%= @vm_config.admin_username %>",
       "ssh_wait_timeout": "20m",
       "vboxmanage": [
         [
           "modifyvm",
           "{{.Name}}",
           "--memory",
-          "<%= @memory %>"
+          "<%= @vm_config.memory %>"
         ],
         [
           "modifyvm",
           "{{.Name}}",
           "--cpus",
-          "<%= @cpus %>"
+          "<%= @vm_config.cpus %>"
         ]
       ]
     },
@@ -51,25 +51,25 @@
         "initrd=/install/initrd.gz -- <enter>"
       ],
       "boot_wait": "5s",
-      "disk_size": 20140,
+      "disk_size": <%= @vm_config.disk_size %>,
       "disk_type_id": "2",
       "guest_os_type": "ubuntu-64",
       "headless": true,
-      "http_directory": "<%= @http_directory %>",
+      "http_directory": "<%= @vm_config.compiled_preseed_directory_path %>",
       "iso_checksum": "61d5e67c70d97b33c13537461a0b153b41304ef412bb0e9d813bb157068c3c65",
       "iso_checksum_type": "sha256",
       "iso_url": "http://releases.ubuntu.com/12.04/ubuntu-12.04.3-server-amd64.iso",
-      "shutdown_command": "echo '<%= @ssh_username %>' | sudo -S shutdown -P now",
-      "ssh_password": "<%= @ssh_password %>",
+      "shutdown_command": "echo '<%= @vm_config.admin_username %>' | sudo -S shutdown -P now",
+      "ssh_password": "<%= @vm_config.admin_password %>",
       "ssh_port": 22,
-      "ssh_username": "<%= @ssh_username %>",
+      "ssh_username": "<%= @vm_config.admin_username %>",
       "ssh_wait_timeout": "20m",
       "tools_upload_flavor": "linux",
-      "tools_upload_path": "VMWareTools.iso",
+      "tools_upload_path": "<%= File.join(@vm_config.home, 'VMWareTools.iso') %>",
       "vmx_data": {
         "cpuid.coresPerSocket": "1",
-        "memsize": "4096",
-        "numvcpus": "4"
+        "memsize": "<%= @vm_config.memory %>",
+        "numvcpus": "<%= @vm_config.cpus %>"
       }
     }
   ],
@@ -78,19 +78,19 @@
       "type": "shell",
       "override": {
         "virtualbox": {
-          "execute_command": "echo '<%= @ssh_username %>'|sudo -S sh '{{.Path}}'"
+          "execute_command": "echo '<%= @vm_config.admin_username %>'|sudo -S sh '{{.Path}}'"
         },
         "vmware": {
-          "execute_command": "echo '<%= @ssh_username %>'|sudo -S sh '{{.Path}}'"
+          "execute_command": "echo '<%= @vm_config.admin_username %>'|sudo -S sh '{{.Path}}'"
         }
       },
-      "scripts": ["<%= @postinstall_script %>"]
+      "scripts": ["<%= @vm_config.compiled_postinstall_script_path %>"]
     }
   ],
   "post-processors": [
     {
       "type": "vagrant",
-      "output": "<%= @vm_name %>-{{.Provider}}.box",
+      "output": "<%= @vm_config.vm_name %>-{{.Provider}}.box"
     }
   ]
 }

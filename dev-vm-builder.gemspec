@@ -11,6 +11,7 @@ Gem::Specification.new do |gem|
   gem.files         += Dir['lib/**/*.rb']
   gem.files         += Dir['bin/**/*']
   gem.require_paths = ['lib']
+  gem.executables   = ['dev-vm-builder']
 
   gem.add_runtime_dependency 'thor', '~> 0.18.1'
 end
