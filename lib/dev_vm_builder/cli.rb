@@ -54,7 +54,7 @@ module DevVmBuilder
 
     method_option 'builder', {
       :type    => :string,
-      :aliases => '-P',
+      :aliases => '-b',
       :default => builders.first,
       :desc    => 'The builder to create the virtual machine with',
       :enum    => builders
@@ -75,7 +75,7 @@ module DevVmBuilder
         :memory         => options[:memory],
         :cpus           => options[:cpus],
         :disk_size      => options[:'disk-size'],
-        :provider       => options[:provider]
+        :builder        => options[:builder]
       })
     end
 
