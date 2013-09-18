@@ -86,7 +86,7 @@ module DevVmBuilder
     end
 
     def temp_directory
-      File.join(Dir.pwd, 'tmp', 'packer')
+      Dir.mktmpdir('packer') { |dir| dir }
     end
 
   end
