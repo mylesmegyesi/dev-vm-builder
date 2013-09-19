@@ -63,8 +63,8 @@ module DevVmBuilder
         :tools_upload_path   => File.join(vm_config.home, 'VMWareTools.iso'),
         :vmx_data => {
           :'cpuid.coresPerSocket' => '1',
-          :memsize                => vm_config.memory,
-          :numvcpus               => vm_config.cpus
+          :memsize                => vm_config.memory.to_s,
+          :numvcpus               => vm_config.cpus.to_s
         }
       }
     end
