@@ -35,7 +35,7 @@ apt-get -y install ruby1.9.1 ruby1.9.1-dev
 # Remove the downloaded .deb files
 apt-get clean
 
-# Installing chef
+echo "Installing Chef"
 gem install chef --version '11.6.0' --no-ri --no-rdoc
 
 mkdir <%= @vm_config.home %>/.ssh
