@@ -29,9 +29,10 @@ else
   /usr/bin/vmware-config-tools.pl -d
 fi
 
-# apt-get install various things necessary (e.g., NFS client, Ruby)
-# and remove optional things to trim down the machine.
-apt-get -y install nfs-common openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison pkg-config libgdbm-dev libffi-dev ruby rubygems
+# Install system Ruby
+apt-get -y install ruby1.9.1 ruby1.9.1-dev
+
+# Remove the downloaded .deb files
 apt-get clean
 
 # Installing chef
