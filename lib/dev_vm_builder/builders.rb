@@ -16,7 +16,7 @@ module DevVmBuilder
         :disk_size         => vm_config.disk_size,
         :headless          => true,
         :http_directory    => vm_config.compiled_preseed_directory_path,
-        :shutdown_command   => "echo '#{vm_config.admin_username}' | sudo -S shutdown -P now",
+        :shutdown_command   => "echo '#{vm_config.admin_password}' | sudo -S shutdown -P now",
         :ssh_password       => vm_config.admin_password,
         :ssh_port           => 22,
         :ssh_username       => vm_config.admin_username,
