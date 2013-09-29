@@ -31,6 +31,10 @@ module DevVmBuilder
       File.join(temp_directory, 'scripts', 'postinstall.sh')
     end
 
+    def provider
+      builder.split('.').last
+    end
+
     private
 
     attr_reader :temp_directory

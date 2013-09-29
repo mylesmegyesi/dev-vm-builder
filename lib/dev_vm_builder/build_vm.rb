@@ -1,8 +1,6 @@
-require 'json'
-require 'erb'
-require 'fileutils'
 require 'dev_vm_builder/isos'
 require 'dev_vm_builder/builders'
+require 'dev_vm_builder/render_template_file'
 
 module DevVmBuilder
   class BuildVm
@@ -42,10 +40,7 @@ module DevVmBuilder
 
     def render_packer_template_file(packer_template_file_path, output)
       full_path = File.join(PACKER_TEMPLATE_ROOT, packer_template_file_path)
-      template_contents = File.open(full_path).read
-      rendered = ERB.new(template_contents).result(binding)
-      FileUtils.mkpath(File.dirname(output))
-      File.open(output, 'w') {|f| f.write(rendered)}
+      RenderTemplateFile.new(full_path, output, binding).call
     end
 
   end

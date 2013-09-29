@@ -1,0 +1,35 @@
+Vagrant.configure('2') do |config|
+
+  config.vm.define('<%= @vm_name %>') do |dev_vm|
+
+    dev_vm.vm.synced_folder '.', '/vagrant', disabled: true
+
+    dev_vm.ssh.forward_agent = true
+    dev_vm.ssh.keep_alive    = true
+    dev_vm.ssh.username      = '<%= @vm_config.admin_username %>'
+<% if @vm_config.provider == 'virtualbox' %>
+    dev_vm.vm.provider 'virtualbox' do |v, override|
+      override.vm.box = '<%= @vm_config.builder %>'
+      v.name          = '<%= @vm_name %>'
+      v.customize ['modifyvm', :id, '--memory', '<%= @vm_config.memory %>']
+      v.customize ['modifyvm', :id, '--cpus', '<%= @vm_config.cpus %>']
+    end
+<% elsif @vm_config.provider == 'vmware' %>
+    dev_vm.vm.provider 'vmware_fusion' do |v, override|
+      override.vm.box   = '<%= @vm_config.builder %>'
+      v.vmx['memsize']  = '<%= @vm_config.memory %>'
+      v.vmx['numvcpus'] = '<%= @vm_config.cpus %>'
+    end
+<% end %>
+    dev_vm.librarian_chef.cheffile_dir = '.'
+    dev_vm.vm.provision :chef_solo do |chef|
+
+      chef.cookbooks_path = ['cookbooks', 'site-cookbooks']
+      chef.roles_path     = 'roles'
+      chef.add_role('<%= @role_name %>')
+
+    end
+
+  end
+
+end

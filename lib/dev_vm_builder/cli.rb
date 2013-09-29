@@ -1,67 +1,81 @@
 require 'thor'
 require 'dev_vm_builder/vm_config'
 require 'dev_vm_builder/build_vm'
+require 'dev_vm_builder/generate_vagrant_template'
 
 module DevVmBuilder
   class Cli < Thor
     package_name 'dev-vm-builder'
 
+    def self.vm_cmd_options
+
+      method_option :username, {
+        :aliases => '-u',
+        :default => 'vagrant',
+        :desc    => 'The username for the admin user',
+        :type    => :string
+      }
+
+      method_option :password, {
+        :aliases => '-p',
+        :default => 'vagrant',
+        :desc    => 'The password for the admin user',
+        :type    => :string
+      }
+
+      method_option :home, {
+        :type    => :string,
+        :aliases => '-h',
+        :default => '/home/{{username}}/',
+        :desc    => 'The home directory for the admin user'
+      }
+
+      method_option :memory, {
+        :aliases => '-m',
+        :default => 4096,
+        :desc    => 'The amount of memory in megabytes to give the virtual machine',
+        :type    => :numeric
+      }
+
+      method_option :cpus, {
+        :aliases => '-c',
+        :default => 4,
+        :desc    => 'The number of virtual cpus to give the virtual machine',
+        :type    => :numeric
+      }
+
+      method_option 'disk-size', {
+        :aliases => '-d',
+        :default => 20140,
+        :desc    => 'The disk size in megabytes to give the virtual machine',
+        :type    => :numeric
+      }
+
+      builders = DevVmBuilder::Builders.builders(DevVmBuilder::ISOS, VmConfig.new('tmp', {})).map { |b| b[:name] }
+
+      method_option 'builder', {
+        :type    => :string,
+        :aliases => '-b',
+        :default => builders.first,
+        :desc    => 'The builder to create the virtual machine with',
+        :enum    => builders
+      }
+
+    end
+
     desc 'build', 'Build a virtual machine (.box file)'
-
-    method_option :username, {
-      :aliases => '-u',
-      :default => 'vagrant',
-      :desc    => 'The username for the admin user',
-      :type    => :string
-    }
-
-    method_option :password, {
-      :aliases => '-p',
-      :default => 'vagrant',
-      :desc    => 'The password for the admin user',
-      :type    => :string
-    }
-
-    method_option :home, {
-      :type    => :string,
-      :aliases => '-h',
-      :default => '/home/{{username}}/',
-      :desc    => 'The home directory for the admin user'
-    }
-
-    method_option :memory, {
-      :aliases => '-m',
-      :default => 4096,
-      :desc    => 'The amount of memory in megabytes to give the virtual machine',
-      :type    => :numeric
-    }
-
-    method_option :cpus, {
-      :aliases => '-c',
-      :default => 4,
-      :desc    => 'The number of virtual cpus to give the virtual machine',
-      :type    => :numeric
-    }
-
-    method_option 'disk-size', {
-      :aliases => '-d',
-      :default => 20140,
-      :desc    => 'The disk size in megabytes to give the virtual machine',
-      :type    => :numeric
-    }
-
-    builders = DevVmBuilder::Builders.builders(DevVmBuilder::ISOS, VmConfig.new('tmp', {})).map { |b| b[:name] }
-
-    method_option 'builder', {
-      :type    => :string,
-      :aliases => '-b',
-      :default => builders.first,
-      :desc    => 'The builder to create the virtual machine with',
-      :enum    => builders
-    }
+    vm_cmd_options
 
     def build
       BuildVm.new(vm_config).call
+    end
+
+    desc 'generate OUTPUT_DIRECTORY', 'Generate a Vagrant development VM'
+    vm_cmd_options
+
+    def generate(output_dir=nil)
+      output = output_dir || File.join(Dir.pwd, 'dev-vm')
+      GenerateVagrantTemplate.new(vm_config, output).call
     end
 
     private
