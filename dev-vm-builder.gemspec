@@ -16,5 +16,5 @@ Gem::Specification.new do |gem|
   gem.executables   = ['dev-vm-builder']
 
   gem.add_runtime_dependency 'thor',           '~> 0.18.1'
-  gem.add_runtime_dependency 'active_support', '~> 4.0.0'
+  gem.add_runtime_dependency 'activesupport',  '~> 4.0.0'
 end

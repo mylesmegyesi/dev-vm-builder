@@ -23,9 +23,6 @@ module DevVmBuilder
 
     attr_reader :vm_config, :output
 
-    def write_vagrantfile
-    end
-
     def render_vagrant_template_file(vagrant_template_file_path, output_file)
       input_absolute_path = File.join(VAGRANT_TEMPLATE_ROOT, vagrant_template_file_path)
       output_absolute_path = File.join(output, output_file)
