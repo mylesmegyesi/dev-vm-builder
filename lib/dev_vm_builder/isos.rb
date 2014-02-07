@@ -1,6 +1,15 @@
 module DevVmBuilder
   ISOS = [
     {
+      :name          => 'ubuntu-13.10.amd64',
+      :checksum      => '4d1a8b720cdd14b76ed9410c63a00d0e',
+      :checksum_type => 'md5',
+      :urls          => [
+        'http://releases.ubuntu.com/13.10/ubuntu-13.10-server-amd64.iso',
+        'http://nl.releases.ubuntu.com/13.10/ubuntu-13.10-server-amd64.iso'
+      ]
+    },
+    {
       :name          => 'ubuntu-13.04.amd64',
       :checksum      => '7d335ca541fc4945b674459cde7bffb9',
       :checksum_type => 'md5',
