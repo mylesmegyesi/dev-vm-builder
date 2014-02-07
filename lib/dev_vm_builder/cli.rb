@@ -78,6 +78,15 @@ module DevVmBuilder
       GenerateVagrantTemplate.new(vm_config, output).call
     end
 
+    desc 'new OUTPUT_DIRECTORY', 'Generate a Vagrant development VM and build a VM (.box file)'
+    vm_cmd_options
+
+    def new(output_dir=nil)
+      output = output_dir || File.join(Dir.pwd, 'dev-vm')
+      GenerateVagrantTemplate.new(vm_config, output).call
+      BuildVm.new(vm_config).call
+    end
+
     private
 
     def vm_config
