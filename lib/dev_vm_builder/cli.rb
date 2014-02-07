@@ -9,6 +9,13 @@ module DevVmBuilder
 
     def self.vm_cmd_options
 
+      method_option 'name', {
+        :aliases => '-n',
+        :default => '{{output directory}}',
+        :desc    => 'The disk size in megabytes to give the virtual machine',
+        :type    => :string
+      }
+
       method_option :username, {
         :aliases => '-u',
         :default => 'vagrant',
@@ -63,34 +70,35 @@ module DevVmBuilder
 
     end
 
-    desc 'build', 'Build a virtual machine (.box file)'
+    desc 'build OUTPUT_DIRECTORY', 'Build a virtual machine (.box file)'
     vm_cmd_options
 
-    def build
-      BuildVm.new(vm_config).call
+    def build(output_dir=nil)
+      BuildVm.new(vm_config(output_dir)).call
     end
 
     desc 'generate OUTPUT_DIRECTORY', 'Generate a Vagrant development VM'
     vm_cmd_options
 
     def generate(output_dir=nil)
-      output = output_dir || File.join(Dir.pwd, 'dev-vm')
-      GenerateVagrantTemplate.new(vm_config, output).call
+      GenerateVagrantTemplate.new(vm_config(output_dir)).call
     end
 
     desc 'new OUTPUT_DIRECTORY', 'Generate a Vagrant development VM and build a VM (.box file)'
     vm_cmd_options
 
     def new(output_dir=nil)
-      output = output_dir || File.join(Dir.pwd, 'dev-vm')
-      GenerateVagrantTemplate.new(vm_config, output).call
-      BuildVm.new(vm_config).call
+      config = vm_config(output_dir)
+      GenerateVagrantTemplate.new(config).call
+      BuildVm.new(config).call
     end
 
     private
 
-    def vm_config
+    def vm_config(output_dir)
+      output = output_dir || File.join(Dir.pwd, 'dev-vm')
       home = options[:home] == '/home/{{username}}/' ? "/home/#{options[:username]}" : options[:home]
+      name = options[:name] == '{{output directory}}' ? File.basename(output) : options[:name]
       VmConfig.new(temp_directory, {
         :admin_username => options[:username],
         :admin_password => options[:password],
@@ -98,7 +106,9 @@ module DevVmBuilder
         :memory         => options[:memory],
         :cpus           => options[:cpus],
         :disk_size      => options[:'disk-size'],
-        :builder        => options[:builder]
+        :builder        => options[:builder],
+        :name           => name,
+        :output         => output
       })
     end
 
