@@ -21,11 +21,13 @@ if test -f .vbox_version ; then
   rm VBoxGuestAdditions.iso
 else
   echo "installing VMWare Tools..."
+  mkdir /mnt/vmware-tools
   mount -o loop <%= @vm_config.home %>/VMWareTools.iso /mnt/vmware-tools
   tar xzvf /mnt/vmware-tools/VMwareTools-*.tar.gz -C /tmp/
   /tmp/vmware-tools-distrib/vmware-install.pl -d
   umount /mnt/vmware-tools
   rm VMWareTools.iso
+  rmdir /mnt/vmware-tools
   /usr/bin/vmware-config-tools.pl -d
 fi
 
