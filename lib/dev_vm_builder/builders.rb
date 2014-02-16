@@ -35,7 +35,7 @@ module DevVmBuilder
     def self.virtualbox_builder(iso, vm_config)
       {
         :name => "#{iso[:name]}.virtualbox",
-        :type => 'virtualbox',
+        :type => 'virtualbox-iso',
         :guest_os_type => 'Ubuntu_64',
         :vboxmanage => [
           [
@@ -57,7 +57,7 @@ module DevVmBuilder
     def self.vmware_builder(iso, vm_config)
       {
         :name                => "#{iso[:name]}.vmware",
-        :type                => 'vmware',
+        :type                => 'vmware-iso',
         :guest_os_type       => 'ubuntu-64',
         :tools_upload_flavor => 'linux',
         :tools_upload_path   => File.join(vm_config.home, 'VMWareTools.iso'),
